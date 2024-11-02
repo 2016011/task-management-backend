@@ -7,7 +7,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import java.util.Date;
 
 public class TokenUtil {
-    private static final long TOKEN_VALIDITY =  60 * 60L;
+    private static final long TOKEN_VALIDITY =  2 * 60L;
     private static final long REFRESH_TOKEN_VALIDITY = 24 * 60 * 60L;
 
     private static Algorithm algorithm = Algorithm.HMAC256("myString");

@@ -78,7 +78,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         boolean auth = request.getRequestURI().contains("/api/users/login") ||
-                request.getRequestURI().contains("/api/users/create");
+                request.getRequestURI().contains("/api/users/register");
         logger.info("authentication filter returned : " + auth);
         return auth;
     }
