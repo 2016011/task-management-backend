@@ -13,7 +13,7 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
-
+// save or update tasks methods
     public Tasks saveOrUpdateTasks(Tasks tasks) {
         Tasks tasksEntity = new Tasks();
         if (tasks.getTaskId()== null) {
@@ -36,12 +36,22 @@ public class TaskService {
             return taskRepository.findAll();
     }
 
+    // Fetch all tasks with sorting the status
+    public List<Tasks> getAllTasks(String status) {
+        if (status != null && !status.isEmpty()) {
+            return taskRepository.findTasksByStatus(status);
+        } else {
+            return taskRepository.findAll();
+        }
+    }
+
     // Fetch tasks by ID
     public Tasks getTasksById(Long tasksId) {
         return taskRepository.findByTaskId(tasksId)
                 .orElseThrow(() -> new RuntimeException("Tasks not found"));
     }
 
+    //delete tasks by ID
     public void deleteTasks(Long taskId) {
         Tasks tasks = taskRepository.findByTaskId(taskId)
                 .orElseThrow(() -> new RuntimeException("Tasks not found"));

@@ -7,8 +7,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import java.util.Date;
 
 public class TokenUtil {
-    private static final long TOKEN_VALIDITY =  2 * 60L;
-    private static final long REFRESH_TOKEN_VALIDITY = 24 * 60 * 60L;
+    private static final long TOKEN_VALIDITY =  2 * 60L;  // set the token expiration timing for 2 min
+    private static final long REFRESH_TOKEN_VALIDITY = 2 * 60L; // set the refreshToken expiration timing for 2 min
 
     private static Algorithm algorithm = Algorithm.HMAC256("myString");
 
@@ -17,6 +17,7 @@ public class TokenUtil {
     public TokenUtil() {
     }
 
+    //algorithms for generate Token
     public static String generateToken(Long id) {
         return JWT.create().withIssuer("base_auth").withClaim("id", id).withIssuedAt(new Date(System.currentTimeMillis())).withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_VALIDITY * 1000)).sign(algorithm);
     }
@@ -30,7 +31,7 @@ public class TokenUtil {
                 .sign(refreshTokenAlgorithm);
     }
 
-    public static Long getidFromToken(String token) {
+    public static Long getIdFromToken(String token) {
         System.out.println("getidFromToken start");
         DecodedJWT decodedJWT = JWT.require(algorithm).build().verify(token);
         return decodedJWT.getClaim("id").asLong();
@@ -40,12 +41,12 @@ public class TokenUtil {
         return algorithm;
     }
 
-    public static Long getidFromHeader(String header) {
+    public static Long getIdFromHeader(String header) {
         String token = header.split(" ")[1];
-        return getidFromToken(token);
+        return getIdFromToken(token);
     }
 
-    public static Long getidFromRefreshToken(String refreshToken) {
+    public static Long getIdFromRefreshToken(String refreshToken) {
         System.out.println("getidFromRefreshToken start : " + refreshToken);
         DecodedJWT decodedJWT = JWT.require(refreshTokenAlgorithm).build().verify(refreshToken);
         Long id =  decodedJWT.getClaim("id").asLong();
@@ -57,7 +58,7 @@ public class TokenUtil {
         System.out.println("refreshRefreshToken start : " + refreshToken);
         String token = JWT.create()
                 .withIssuer("base_auth")
-                .withClaim("id", getidFromRefreshToken(refreshToken))
+                .withClaim("id", getIdFromRefreshToken(refreshToken))
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_VALIDITY * 1000))
                 .sign(refreshTokenAlgorithm);
@@ -68,7 +69,7 @@ public class TokenUtil {
     public static String refreshToken(String token) {
         return JWT.create()
                 .withIssuer("base_auth")
-                .withClaim("id", getidFromToken(token))
+                .withClaim("id", getIdFromToken(token))
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_VALIDITY * 1000))
                 .sign(algorithm);

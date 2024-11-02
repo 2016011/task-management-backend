@@ -26,16 +26,18 @@ public class LoginHelper {
         this.userService = userService;
     }
 
+    // Get the return for User Login Result.
+    // with massages.
     public UserLoginResult login(Authentication authentication, UserLoginDto userLoginDto){
         Optional<User> user = userService.findUserByUsername(userLoginDto.getUserName());
-        return getGoProLoginResults(authentication, user);
+        return getWebLoginResults(authentication, user);
     }
 
     public UserLoginResult unlockUser(Authentication authentication, User user){
-        return getGoProLoginResults(authentication, Optional.ofNullable(user));
+        return getWebLoginResults(authentication, Optional.ofNullable(user));
     }
 
-    private UserLoginResult getGoProLoginResults(Authentication authentication, Optional<User> user) {
+    private UserLoginResult getWebLoginResults(Authentication authentication, Optional<User> user) {
         if (authentication.isAuthenticated()) {
             String token = generateToken(user.get().getUserId());
             String refreshToken = generateRefreshToken(user.get().getUserId());

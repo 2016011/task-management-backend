@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -20,20 +21,22 @@ public class TasksController {
     @CrossOrigin
     @PostMapping("/create")
     public ResponseEntity<Tasks> createTasks(@RequestBody Tasks tasks) {
-        if (tasks.getTaskId() != null) {
+        if (tasks.getTaskId() != null || Objects.equals(tasks.getTitle(), "") && Objects.equals(tasks.getDescription(), "")) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Id should be null for new tasks
         }
         Tasks newTasks = taskService.saveOrUpdateTasks(tasks);
         return new ResponseEntity<>(newTasks, HttpStatus.CREATED);
     }
 
+    //Controller for fetch the All tasks and filter by tasks status.
     @CrossOrigin
     @GetMapping("/all")
-    public ResponseEntity<List<Tasks>> getAllTasks() {
-        List<Tasks> tasks = taskService.getAllTasks();
+    public ResponseEntity<List<Tasks>> getAllTasks(@RequestParam(value = "status", required = false) String status) {
+        List<Tasks> tasks = taskService.getAllTasks(status);
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
+    //get the tasks by task ID
     @CrossOrigin
     @GetMapping("/get/{id}")
     public ResponseEntity<Tasks> getTaskById(@PathVariable Long id) {

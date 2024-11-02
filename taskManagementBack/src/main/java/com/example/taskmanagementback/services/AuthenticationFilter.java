@@ -37,7 +37,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
             try {
                 JWT.require(TokenUtil.getSignAlgorithm()).build().verify(authToken);
-                Long id = TokenUtil.getidFromToken(authToken);
+                Long id = TokenUtil.getIdFromToken(authToken);
                 authlogger.info("id : {}", id);
 
                 Optional<User> user = userService.findUserById(id);
@@ -75,6 +75,8 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
+    //filter the authentication endpoint
+    //methods for do not require Authentication
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         boolean auth = request.getRequestURI().contains("/api/users/login") ||

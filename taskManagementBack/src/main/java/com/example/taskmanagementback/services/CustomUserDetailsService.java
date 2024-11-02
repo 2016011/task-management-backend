@@ -1,5 +1,4 @@
 package com.example.taskmanagementback.services;
-
 import com.example.taskmanagementback.modals.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,18 +17,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userService = userService;
     }
 
+    //Method for loadUserByUserName.
+    //maintain consistency and time-consuming.
     @Transactional
     public UserDetails loadUserByUsername(String userName) {
         User user = this.userService.findUserByUsername(userName).orElseThrow(() ->
                 new UsernameNotFoundException(userName + " not found"));
-        return UserPrincipal.create(user);
-    }
-
-    @Transactional
-    public UserDetails loadUserById(Long id) {
-        User user = (User)this.userService.findUserById(id).orElseThrow(() -> {
-            return new ResourceNotFoundException("User", "id", id);
-        });
         return UserPrincipal.create(user);
     }
 }

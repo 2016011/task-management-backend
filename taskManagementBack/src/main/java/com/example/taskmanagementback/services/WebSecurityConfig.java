@@ -40,13 +40,6 @@ public class WebSecurityConfig {
     @Autowired
     private SecurityConfig securityConfig;
 
-//    private final Bucket registerEndpointBucket = createBucket();
-
-//    private Bucket createBucket() {
-//        Bandwidth limit = Bandwidth.classic(5, Refill.intervally(5, Duration.ofMinutes(1)));
-//        return new LocalBucketBuilder().addLimit(limit).build();
-//    }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
@@ -54,11 +47,6 @@ public class WebSecurityConfig {
         authenticationProvider.setPasswordEncoder(securityConfig.passwordEncoder());
         return authenticationProvider;
     }
-
-//    @Bean
-//    public BCryptPasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
