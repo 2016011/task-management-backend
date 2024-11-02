@@ -17,6 +17,7 @@ public class TasksController {
     @Autowired
     private TaskService taskService;
 
+    @CrossOrigin
     @PostMapping("/create")
     public ResponseEntity<Tasks> createTasks(@RequestBody Tasks tasks) {
         if (tasks.getTaskId() != null) {
@@ -26,13 +27,22 @@ public class TasksController {
         return new ResponseEntity<>(newTasks, HttpStatus.CREATED);
     }
 
+    @CrossOrigin
     @GetMapping("/all")
     public ResponseEntity<List<Tasks>> getAllTasks() {
         List<Tasks> tasks = taskService.getAllTasks();
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
+    @CrossOrigin
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Tasks> getTaskById(@PathVariable Long id) {
+        Tasks tasks = taskService.getTasksById(id);
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
+    }
+
     // Update an existing tasks
+    @CrossOrigin
     @PutMapping("/update")
     public ResponseEntity<Tasks> updateUser(@RequestBody Tasks tasks) {
         if (tasks.getTaskId() == null) {
@@ -42,6 +52,7 @@ public class TasksController {
         return new ResponseEntity<>(updatedTasks, HttpStatus.OK);
     }
 
+    @CrossOrigin
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         taskService.deleteTasks(id);
